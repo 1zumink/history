@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "hash": "node scripts/hash.mjs"
+    "hash": "node scripts/hash.mjs",
+    "deploy": "npm run build && gh-pages -d dist --dotfiles --nojekyll"
   },
   "dependencies": {
     "@fontsource/caveat": "^5.3.0",
@@ -22,6 +23,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
+    "gh-pages": "^6.3.0",
     "oxlint": "^1.81.0",
     "vite": "^8.3.0"
   }
