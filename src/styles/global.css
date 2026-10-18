@@ -1,0 +1,1216 @@
+/* ─────────────────────────── токены ─────────────────────────── */
+:root {
+  --bg: #ffffff;
+  --ink: #000000;
+  --muted: #7a7a7a;
+
+  --f-grotesk: 'Styrene A', 'Helvetica Neue', Arial, sans-serif;
+  --f-hand: 'Caveat', cursive;
+
+  /* сжатие гротеска по горизонтали — тот самый «плакатный» вид */
+  --sx: 0.72;
+  /* чб для фото и видео; поставь none, чтобы были цветными */
+  --photo-filter: grayscale(1) contrast(1.2);
+
+  --gutter: clamp(16px, 4vw, 64px);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-grotesk);
+  font-size: 17px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+p,
+figure {
+  margin: 0;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.story {
+  overflow-x: clip;
+}
+
+.split-parent {
+  width: 100%;
+}
+
+/* Сжатый гротеск: блок шире на 1/sx и сжат обратно — высота строк остаётся честной */
+.stretch {
+  width: calc(100% / var(--sx));
+  transform: scaleX(var(--sx));
+  transform-origin: 0 0;
+}
+
+/* Общий стиль крупного гротеска */
+.intro-title,
+.chapter-title,
+.gate-q,
+.strip-title,
+.hero-title,
+.letter-title,
+.trophies-title,
+.counter-num,
+.t-grotesk.s-l,
+.t-grotesk.s-xl,
+.marquee span {
+  font-family: var(--f-grotesk);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.86;
+}
+
+/* Мелкие подписи капсом с разрядкой */
+.caps,
+.chapter-tag,
+.toast-label,
+.counter-unit,
+.footer,
+.intro-scroll,
+.shot figcaption,
+.strip-fly figcaption,
+.video-sound {
+  font-family: var(--f-grotesk);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+/* ─────────────────────────── медиа ─────────────────────────── */
+.media {
+  position: relative;
+  overflow: hidden;
+  background: #efefef;
+  aspect-ratio: 4 / 5;
+  width: 100%;
+}
+
+.media-fill {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+}
+
+.media img,
+.media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--photo-filter);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.media-ph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+}
+
+.media-ph span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a0a0a0;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ─────────────────────────── вход ─────────────────────────── */
+.gate {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  padding: var(--gutter);
+  padding-top: max(var(--gutter), env(safe-area-inset-top));
+  padding-bottom: max(var(--gutter), env(safe-area-inset-bottom));
+}
+
+.gate-inner {
+  width: min(900px, 100%);
+  text-align: center;
+}
+
+.gate-q {
+  font-size: clamp(54px, 11vw, 150px);
+}
+
+.gate-form {
+  margin: 48px auto 0;
+  display: flex;
+  width: min(440px, 100%);
+  border: 3px solid var(--ink);
+}
+
+.gate-form input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: var(--f-grotesk);
+  font-weight: 700;
+  font-size: 18px; /* ≥16px — iOS не зумит поле */
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  padding: 14px 16px;
+}
+
+.gate-form input::placeholder {
+  color: #b5b5b5;
+}
+
+.gate-form button {
+  flex: none;
+  width: 56px;
+  border: 0;
+  background: var(--ink);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+}
+
+.gate-msg {
+  min-height: 1.6em;
+  margin-top: 18px;
+  font-family: var(--f-hand);
+  font-size: 28px;
+}
+
+.gate-hint {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.gate-wipe,
+.curtain {
+  position: fixed;
+  inset: 0;
+  background: var(--ink);
+  z-index: 100;
+  pointer-events: none;
+}
+
+.gate-wipe {
+  clip-path: circle(0px at 50% 50%);
+}
+
+/* ─────────────────────────── первый экран ─────────────────────────── */
+.intro {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  padding: var(--gutter);
+  overflow: hidden;
+}
+
+.intro-title-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+}
+
+.intro-title {
+  font-size: min(clamp(90px, 21vw, 360px), calc(150vw / var(--len, 6)));
+  line-height: 0.82;
+}
+
+.intro-names {
+  margin-top: 0.25em;
+  font-family: var(--f-hand);
+  font-size: clamp(38px, 5.5vw, 84px);
+  line-height: 1;
+}
+
+.intro-photo {
+  position: absolute;
+  z-index: 1;
+  width: clamp(90px, 12vw, 200px);
+}
+
+.intro-photo.p0 { top: 10%; left: 6%; }
+.intro-photo.p1 { top: 8%; right: 8%; }
+.intro-photo.p2 { bottom: 10%; left: 10%; }
+.intro-photo.p3 { bottom: 8%; right: 6%; }
+
+.intro-scroll {
+  position: absolute;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  left: 50%;
+  translate: -50% 0;
+  font-size: 22px;
+  letter-spacing: 0;
+  animation: bob 1.8s ease-in-out infinite;
+  z-index: 3;
+}
+
+@keyframes bob {
+  50% { transform: translateY(8px); }
+}
+
+/* ─────────────────────────── главы ─────────────────────────── */
+.chapter {
+  min-height: 80svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 16vh var(--gutter) 8vh;
+}
+
+.chapter.a-left { align-items: flex-start; }
+.chapter.a-right { align-items: flex-end; }
+.chapter.a-center { align-items: center; }
+
+.chapter > .stretch {
+  align-self: flex-start;
+}
+
+/* Плашка «дата — место» — как наклейка Parental Advisory */
+.chapter-tag {
+  display: inline-block;
+  margin-bottom: clamp(14px, 2vw, 28px);
+  padding: 8px 14px 7px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: clamp(11px, 1vw, 14px);
+}
+
+.chapter-tag span + span::before {
+  content: ' — ';
+}
+
+/* «Глава, но не факт» — полупрозрачная */
+.chapter.ghost {
+  opacity: 0.18;
+}
+
+.chapter-title {
+  font-size: min(clamp(76px, 17vw, 300px), calc(150vw / var(--len, 6)));
+}
+
+.chapter-sub {
+  max-width: 900px;
+  margin-top: 0.3em;
+  font-family: var(--f-hand);
+  font-size: clamp(32px, 4.4vw, 66px);
+  line-height: 1.05;
+}
+
+/* ─────────────────────────── текст ─────────────────────────── */
+.text-block {
+  padding: clamp(48px, 10vh, 120px) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.text-block > div {
+  width: 100%;
+}
+
+.text-block.a-left { align-items: flex-start; }
+.text-block.a-center { align-items: center; }
+.text-block.a-right { align-items: flex-end; }
+
+.text-block > .plain {
+  display: flex;
+  justify-content: inherit;
+}
+
+.text-block.a-center > .plain { justify-content: center; }
+.text-block.a-right > .plain { justify-content: flex-end; }
+
+.text-split {
+  max-width: 1100px;
+}
+
+.t-hand { font-family: var(--f-hand); line-height: 1.1; }
+.t-body { line-height: 1.5; }
+
+.t-grotesk.s-s { font-size: clamp(14px, 1.3vw, 18px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; }
+.t-grotesk.s-m { font-size: clamp(26px, 3.4vw, 50px); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.95; }
+.t-grotesk.s-l { font-size: min(clamp(60px, 11vw, 190px), calc(150vw / var(--len, 6))); }
+.t-grotesk.s-xl { font-size: min(clamp(100px, 24vw, 420px), calc(150vw / var(--len, 6))); }
+
+.t-hand.s-s { font-size: clamp(24px, 2.4vw, 32px); }
+.t-hand.s-m { font-size: clamp(34px, 4.6vw, 64px); }
+.t-hand.s-l { font-size: clamp(44px, 7vw, 108px); }
+.t-hand.s-xl { font-size: clamp(64px, 12vw, 190px); }
+
+.t-body.s-s { font-size: clamp(16px, 1.4vw, 20px); }
+.t-body.s-m { font-size: clamp(20px, 2.2vw, 30px); }
+.t-body.s-l,
+.t-body.s-xl { font-size: clamp(24px, 3vw, 42px); }
+
+.t-body .text-split,
+.t-grotesk.s-s .text-split { max-width: 600px; }
+.t-hand.s-m .text-split { max-width: 900px; }
+
+/* ─────────────────────────── scatter ─────────────────────────── */
+.scatter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3vw 4vw;
+  padding: 10vh var(--gutter) 16vh;
+  overflow-x: clip;
+}
+
+.scatter-item {
+  position: relative;
+  margin-top: calc(var(--off) * 1vw);
+}
+
+.scatter-item.sz-s { width: clamp(150px, 17vw, 270px); }
+.scatter-item.sz-m { width: clamp(200px, 24vw, 390px); }
+.scatter-item.sz-l { width: clamp(260px, 33vw, 540px); }
+.scatter-item.sz-xl { width: clamp(320px, 48vw, 780px); }
+
+.scatter-fly {
+  will-change: transform;
+}
+
+.shot figcaption,
+.strip-fly figcaption {
+  margin-top: 10px;
+  font-size: 10px;
+}
+
+/* Записка между фото: чёрная плашка, рукописный текст */
+.note {
+  padding: 1.1em 0.9em;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--f-hand);
+  font-size: clamp(26px, 2.6vw, 40px);
+  line-height: 1.1;
+  text-align: center;
+}
+
+/* ─────────────────────────── hero ─────────────────────────── */
+.hero {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.hero-clip {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(24% 30% 24% 30%);
+}
+
+.hero-title {
+  position: relative;
+  z-index: 2;
+  font-size: min(clamp(120px, 30vw, 520px), calc(170vw / var(--len, 4)));
+  color: #fff;
+  mix-blend-mode: difference;
+  transform: scaleX(var(--sx));
+  pointer-events: none;
+}
+
+.hero-caption {
+  position: absolute;
+  z-index: 2;
+  left: var(--gutter);
+  bottom: max(var(--gutter), env(safe-area-inset-bottom));
+  max-width: 80%;
+  font-family: var(--f-hand);
+  font-size: clamp(28px, 3.4vw, 50px);
+  line-height: 1.05;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+/* ─────────────────────────── strip ─────────────────────────── */
+.strip {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.strip-track {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: max-content;
+  gap: 4vw;
+  padding: 0 8vw;
+}
+
+.strip-head {
+  flex: none;
+  width: min(36vw, 520px);
+}
+
+.strip-title {
+  font-size: min(clamp(90px, 15vw, 260px), calc(50vw / var(--len, 4)));
+}
+
+.strip-sub {
+  margin-top: 0.3em;
+  font-family: var(--f-hand);
+  font-size: clamp(30px, 3vw, 46px);
+}
+
+.strip-item {
+  flex: none;
+  translate: 0 calc(var(--shift) * 6svh);
+}
+
+.strip-item .media {
+  width: auto;
+}
+
+.strip-item.sz-s .media { height: 36svh; }
+.strip-item.sz-m .media { height: 52svh; }
+.strip-item.sz-l .media { height: 68svh; }
+
+/* ─────────────────────────── collage ─────────────────────────── */
+.collage-wrap {
+  padding: 16vh var(--gutter);
+}
+
+.collage {
+  position: relative;
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 16 / 10;
+}
+
+.collage-item {
+  position: absolute;
+}
+
+.collage-item.c0 { left: 0; top: 8%; width: 52%; z-index: 1; }
+.collage-item.c1 { right: 2%; top: 0; width: 34%; z-index: 2; }
+.collage-item.c2 { right: 14%; bottom: 0; width: 26%; z-index: 3; }
+
+.collage.n2 .collage-item.c1 { top: 22%; }
+
+.collage-text {
+  position: absolute;
+  left: 3%;
+  bottom: -2%;
+  width: 40%;
+  z-index: 4;
+}
+
+.collage-note {
+  font-family: var(--f-hand);
+  font-size: clamp(28px, 3.2vw, 50px);
+  line-height: 1.05;
+}
+
+/* ─────────────────────────── сетка ─────────────────────────── */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: clamp(6px, 0.8vw, 12px);
+  width: min(calc(var(--cols) * 220px), 100%);
+  margin: 0 auto;
+  padding: 8vh var(--gutter);
+  box-sizing: content-box;
+  max-width: calc(100% - 2 * var(--gutter));
+}
+
+/* ─────────────────────────── видео ─────────────────────────── */
+.video-block {
+  --w: 80vw;
+  padding: 14vh var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-block.sz-m { --w: 60vw; }
+.video-block.sz-xl { --w: 100vw; padding-inline: 0; }
+
+.video-frame {
+  position: relative;
+  width: min(var(--w), calc(86svh * var(--r)));
+}
+
+.video-sound {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 10px 14px;
+  border: 0;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 10px;
+}
+
+.video-caption {
+  margin-top: 20px;
+  font-family: var(--f-hand);
+  font-size: clamp(28px, 3vw, 44px);
+  text-align: center;
+}
+
+/* ─────────────────────────── кружки ─────────────────────────── */
+.circles {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4vw;
+  padding: 12vh var(--gutter);
+}
+
+.circle.c0 { width: clamp(220px, 34vw, 520px); }
+.circle.c1 { width: clamp(180px, 26vw, 400px); margin-top: 10vw; }
+
+.circle-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #efefef;
+}
+
+.circle-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--photo-filter);
+}
+
+.circle figcaption {
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────── бегущая строка ─────────────────────────── */
+.marquee {
+  margin: 10vh 0;
+  padding: clamp(10px, 1.4vw, 20px) 0;
+  overflow: hidden;
+  border-block: 3px solid var(--ink);
+  rotate: -2deg;
+  width: 110vw;
+  margin-left: -5vw;
+}
+
+.marquee.tilt-r { rotate: 2deg; }
+
+.marquee.dark {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+}
+
+.marquee-group {
+  display: flex;
+  flex: none;
+}
+
+.marquee span {
+  display: inline-flex;
+  align-items: center;
+  font-size: clamp(56px, 9vw, 150px);
+  white-space: nowrap;
+}
+
+.marquee em {
+  font-style: normal;
+  margin: 0 0.35em;
+}
+
+/* ─────────────────────────── счётчик ─────────────────────────── */
+.counter {
+  padding: 14vh var(--gutter);
+  text-align: center;
+}
+
+.counter-label {
+  font-family: var(--f-hand);
+  font-size: clamp(36px, 5vw, 72px);
+}
+
+.counter-days {
+  margin: 0.1em 0 0.4em;
+}
+
+.counter-days > .stretch {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.counter-num {
+  font-size: clamp(170px, 42vw, 680px);
+  line-height: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter-star {
+  font-size: clamp(60px, 12vw, 200px);
+  font-weight: 900;
+  line-height: 0.8;
+}
+
+.counter-unit {
+  display: block;
+  margin-top: 0.6em;
+  font-size: clamp(14px, 1.6vw, 22px);
+}
+
+.counter-since {
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 500;
+}
+
+.counter-clock {
+  margin-top: 8px;
+  font-weight: 900;
+  font-size: clamp(26px, 3.4vw, 48px);
+  font-variant-numeric: tabular-nums;
+}
+
+.counter-clock span {
+  font-family: var(--f-hand);
+  font-weight: 400;
+  font-size: 1.1em;
+  margin-right: 0.15em;
+}
+
+.counter-note {
+  margin-top: 28px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────── достижения ─────────────────────────── */
+.ach-marker {
+  height: 0;
+}
+
+/* Плашка в духе «PARDON MY SWAG»: чёрный блок с белой рамкой внутри */
+.toast {
+  position: fixed;
+  z-index: 90;
+  right: max(24px, env(safe-area-inset-right));
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: min(380px, calc(100vw - 32px));
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px 16px 14px;
+  background: var(--ink);
+  color: var(--bg);
+  outline: 2px solid var(--bg);
+  outline-offset: -7px;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toast-icon {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  background: var(--bg);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  filter: grayscale(1) contrast(1.4);
+}
+
+.toast-body {
+  min-width: 0;
+}
+
+.toast-label {
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+.toast-title {
+  margin-top: 4px;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.toast-desc {
+  margin-top: 3px;
+  font-family: var(--f-hand);
+  font-size: 21px;
+  line-height: 1.1;
+}
+
+.toast-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--bg);
+  transform-origin: left;
+}
+
+.trophies {
+  padding: 12vh var(--gutter);
+  text-align: center;
+}
+
+.trophies-title {
+  font-size: clamp(56px, 10vw, 170px);
+}
+
+.trophies-sub {
+  margin-top: 14px;
+  font-family: var(--f-hand);
+  font-size: clamp(26px, 2.6vw, 38px);
+}
+
+.trophies-grid {
+  margin: 48px auto 0;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.trophy-card {
+  height: 100%;
+  padding: 22px 16px;
+  border: 3px solid var(--ink);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+@media (hover: hover) {
+  .trophy-card:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+}
+
+.trophy-icon {
+  font-size: 36px;
+  line-height: 1;
+  filter: grayscale(1) contrast(1.4);
+}
+
+.trophy-title {
+  margin-top: 14px;
+  font-weight: 900;
+  font-size: 15px;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.trophy-desc {
+  margin-top: 4px;
+  font-family: var(--f-hand);
+  font-size: 21px;
+  line-height: 1.1;
+}
+
+/* ─────────────────────────── письмо ─────────────────────────── */
+.letter {
+  padding: 16vh var(--gutter) 8vh;
+  text-align: center;
+}
+
+.letter-title {
+  font-size: min(clamp(70px, 14vw, 240px), calc(150vw / var(--len, 6)));
+}
+
+.letter-paper {
+  margin: clamp(32px, 6vh, 64px) auto 0;
+  width: min(680px, 100%);
+  padding: clamp(24px, 5vw, 60px);
+  border: 3px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+}
+
+.letter-p {
+  font-family: var(--f-hand);
+  font-size: clamp(26px, 2.8vw, 36px);
+  line-height: 1.3;
+}
+
+.letter-sign {
+  margin-top: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.letter-signature {
+  width: auto;
+  font-family: var(--f-hand);
+  font-size: clamp(32px, 3.4vw, 46px);
+}
+
+.letter-heart {
+  width: 50px;
+  flex: none;
+}
+
+/* ─────────────────────────── локация ─────────────────────────── */
+.place {
+  padding: 12vh var(--gutter) 2vh;
+}
+
+.place-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.place-title {
+  width: auto;
+  font-weight: 900;
+  font-size: clamp(30px, 4.6vw, 72px);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.place-date {
+  font-weight: 700;
+  font-size: clamp(11px, 1vw, 14px);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+.place-line {
+  display: block;
+  height: 3px;
+  margin-top: 14px;
+  background: var(--ink);
+  transform-origin: left;
+}
+
+/* ─────────────────────────── счётчик в углу ─────────────────────────── */
+.days-badge {
+  position: fixed;
+  z-index: 80;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  padding: 9px 12px 8px;
+  background: var(--ink);
+  color: var(--bg);
+  text-align: right;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.days-badge b {
+  display: block;
+  font-weight: 900;
+  font-size: clamp(13px, 1.2vw, 16px);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.days-badge span {
+  display: block;
+  margin-top: 4px;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+/* ─────────────────────────── прочее ─────────────────────────── */
+.spacer.sz-s { height: 6vh; }
+.spacer.sz-m { height: 14vh; }
+.spacer.sz-l { height: 28vh; }
+
+.footer {
+  padding: 40px var(--gutter) max(40px, env(safe-area-inset-bottom));
+  text-align: center;
+  font-size: 10px;
+}
+
+/* ─────────────────────────── телефон ─────────────────────────── */
+@media (max-width: 767px) {
+  :root {
+    --sx: 0.78;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .intro-title {
+    font-size: min(25vw, calc(140vw / var(--len, 6)));
+  }
+
+  .intro-photo { width: 24vw; }
+  .intro-photo.p0 { top: 9%; left: 5%; }
+  .intro-photo.p1 { top: 7%; right: 6%; }
+  .intro-photo.p2 { bottom: 12%; left: 7%; }
+  .intro-photo.p3 { bottom: 10%; right: 6%; }
+
+  .chapter {
+    min-height: 70svh;
+    padding-top: 12vh;
+  }
+
+  .chapter-title {
+    font-size: min(20vw, calc(140vw / var(--len, 6)));
+  }
+
+  .gate-q {
+    font-size: 15vw;
+  }
+
+  .t-grotesk.s-l { font-size: min(16vw, calc(140vw / var(--len, 6))); }
+  .t-grotesk.s-xl { font-size: min(27vw, calc(140vw / var(--len, 6))); }
+
+  /* scatter → колонка: фото по очереди то слева, то справа, чуть внахлёст */
+  .scatter {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0;
+    padding-block: 6vh 12vh;
+  }
+
+  .scatter-item {
+    margin-top: 0;
+    align-self: flex-start;
+  }
+
+  .scatter-item + .scatter-item {
+    margin-top: -6vw;
+  }
+
+  .scatter-item:nth-child(even) {
+    align-self: flex-end;
+  }
+
+  .scatter-item.sz-s { width: 48vw; }
+  .scatter-item.sz-m { width: 64vw; }
+  .scatter-item.sz-l { width: 80vw; }
+  .scatter-item.sz-xl { width: 92vw; }
+
+  .note {
+    margin: 8vw 0;
+    font-size: 28px;
+  }
+
+  .hero-clip {
+    clip-path: inset(20% 12% 20% 12%);
+  }
+
+  /* strip → нативная свайп-лента */
+  .strip {
+    height: auto;
+    overflow: visible;
+    padding: 6vh 0;
+  }
+
+  .strip-track {
+    width: 100%;
+    height: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    padding: 6vh var(--gutter);
+    gap: 14px;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .strip-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .strip-head {
+    width: 64vw;
+    scroll-snap-align: start;
+  }
+
+  .strip-title {
+    font-size: min(24vw, calc(85vw / var(--len, 4)));
+  }
+
+  .strip-item {
+    scroll-snap-align: start;
+    translate: 0 calc(var(--shift) * 3vh);
+  }
+
+  .strip-item.sz-s .media { height: 34svh; }
+  .strip-item.sz-m .media { height: 42svh; }
+  .strip-item.sz-l .media { height: 50svh; }
+
+  .photo-grid {
+    grid-template-columns: repeat(var(--cols-m), minmax(0, 1fr));
+    width: auto;
+  }
+
+  .circles {
+    gap: 3vw;
+    padding-inline: 4vw;
+  }
+
+  .circle.c0 { width: 50vw; }
+  .circle.c1 { width: 40vw; margin-top: 18vw; }
+
+  .collage {
+    aspect-ratio: 3 / 4;
+  }
+
+  .collage-item.c0 { left: 0; top: 0; width: 78%; }
+  .collage-item.c1 { right: 0; top: 34%; width: 54%; }
+  .collage-item.c2 { left: 6%; bottom: 0; width: 40%; }
+  .collage.n2 .collage-item.c1 { top: 40%; }
+
+  .collage-text {
+    left: 0;
+    top: 47%;
+    bottom: auto;
+    width: 44%;
+  }
+
+  .collage-note {
+    font-size: 26px;
+  }
+
+  .video-block,
+  .video-block.sz-m {
+    --w: calc(100vw - 2 * var(--gutter));
+  }
+
+  .video-block.sz-xl {
+    --w: 100vw;
+  }
+
+  .marquee {
+    border-block-width: 2px;
+  }
+
+  .marquee span {
+    font-size: 15vw;
+  }
+
+  .counter-num {
+    font-size: 48vw;
+  }
+
+  .toast {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: 50%;
+    right: auto;
+    translate: -50% 0;
+    width: calc(100vw - 24px);
+  }
+
+  .toast-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 22px;
+  }
+
+  .toast-title {
+    font-size: 16px;
+  }
+
+  .trophies-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .trophy-card {
+    padding: 16px 12px;
+  }
+
+  .letter-title {
+    font-size: min(18vw, calc(140vw / var(--len, 6)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-scroll {
+    animation: none;
+  }
+
+  .hero-clip {
+    clip-path: none;
+  }
+}
